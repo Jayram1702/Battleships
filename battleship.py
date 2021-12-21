@@ -170,7 +170,17 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isHorizontal(ship):
-    return
+    ship.sort()
+    for k in ship:        
+        j = k[0]
+        for l in ship:
+            d = l[0]
+            if k[1] == l[1] or k[1]== l[1]-1 or k[1] == l[1]-2:
+                if j != d:           
+                    return False
+            else:
+                return False
+        return True
 
 
 '''
