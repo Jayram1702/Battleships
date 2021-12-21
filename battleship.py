@@ -29,7 +29,7 @@ def makeModel(data):
     data["rows"] = 10
     data["cols"] = 10
     data["boardsize"] = 500
-    data["cellsize"] = 50
+    data["cellsize"] = data["boardsize"]/data["rows"]
     data["userboard"] = test.testGrid()
     data["computerboard"] = emptyGrid(data["rows"], data["cols"])
     data["numberofships"] = 5
@@ -152,8 +152,17 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isVertical(ship):
-    return
-
+    ship.sort()
+    for k in ship:        
+        j = k[1]
+        for l in ship:
+            d = l[1]
+            if k[0] == l[0] or k[0]== l[0]-1 or k[0] == l[0]-2:
+                if j != d:           
+                    return False
+            else:
+                return False
+        return True
 
 '''
 isHorizontal(ship)
@@ -312,14 +321,13 @@ def runSimulation(w, h):
 # This code runs the test cases to check your work
 if __name__ == "__main__":
 
-    # test.testGrid()
-    # test.testDrawGrid()
-    # test.testMakeModel()
+        test.testIsVertical()
+        test.testIsHorizontal()
 
 
 
 
     ## Finally, run the simulation to test it manually ##
-    runSimulation(500, 500)
+    # runSimulation(500, 500)
 
 
