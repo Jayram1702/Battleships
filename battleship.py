@@ -66,6 +66,9 @@ Parameters: dict mapping strs to values ; mouse event object ; 2D list of ints
 Returns: None
 '''
 def mousePressed(data, event, board):
+    ccell = getClickedCell(data, event)
+    if board == "user":
+        clickUserBoard(data, ccell[0], ccell[1])
     pass
 
 #### WEEK 1 ####
@@ -226,7 +229,7 @@ Returns: None
 '''
 def placeShip(data):
     egrid = data["userboard"]
-    if shipIsValid(egrid, data["temship"]) == True:
+    if shipIsValid(egrid, data["tempship"]) == True:
         for x in data["tempship"]:
             egrid[x[0]][x[1]] = SHIP_UNCLICKED
         data["usership"] = data["usership"] + 1
@@ -245,7 +248,7 @@ def clickUserBoard(data, row, col):
     if [row,col] in rc or data["usership"] == 5:
         return
     data["tempship"].append([row,col])
-    if len(data["temship"]) == 3:
+    if len(data["tempship"]) == 3:
         placeShip(data)
     if data["usership"] == 5:
         print("you can start the game")
