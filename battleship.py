@@ -34,7 +34,8 @@ def makeModel(data):
     data["computerboard"] = emptyGrid(data["rows"], data["cols"])
     data["numberofships"] = 5
     data["computerboard"] = addShips(data["computerboard"], data["numberofships"])
-    data["tempship"] = test.testShip()
+    data["tempship"] = []
+    data["usership"] = 0
     return data
 
 
@@ -154,17 +155,12 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isVertical(ship):
-    ship.sort()
-    for k in ship:        
-        j = k[1]
-        for l in ship:
-            d = l[1]
-            if k[0] == l[0] or k[0]== l[0]-1 or k[0] == l[0]-2:
-                if j != d:           
-                    return False
-            else:
-                return False
-        return True
+    i=0
+    if ship[i][1]==ship[i+1][1]==ship[i+2][1]:
+        ship.sort()
+        if ship[i+1][0]-ship[i][0]==1 and ship[i+2][0]-ship[i+1][0]==1:
+            return True
+    return False
 
 '''
 isHorizontal(ship)
@@ -172,17 +168,12 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isHorizontal(ship):
-    ship.sort()
-    for k in ship:        
-        j = k[0]
-        for l in ship:
-            d = l[0]
-            if k[1] == l[1] or k[1]== l[1]-1 or k[1] == l[1]-2:
-                if j != d:           
-                    return False
-            else:
-                return False
-        return True
+    i=0
+    if ship[i][0]==ship[i+1][0]==ship[i+2][0]:
+        ship.sort()
+        if ship[i+1][1]-ship[i][1]==1 and ship[i+2][1]-ship[i+1][1]==1:
+            return True
+    return False
 
 
 '''
@@ -218,7 +209,14 @@ Parameters: 2D list of ints ; 2D list of ints
 Returns: bool
 '''
 def shipIsValid(grid, ship):
-    return
+    v = isVertical(ship)
+    h = isHorizontal(ship)
+    cship=checkShip(grid, ship)
+    if cship == True:
+        if len(ship) == 3:
+            if v == True or h == True:
+                return True
+    return False
 
 
 '''
@@ -227,8 +225,15 @@ Parameters: dict mapping strs to values
 Returns: None
 '''
 def placeShip(data):
-    return
-
+    egrid = data["userboard"]
+    if shipIsValid(egrid, data["temship"]) == True:
+        for x in data["tempship"]:
+            egrid[x[0]][x[1]] = SHIP_UNCLICKED
+        data["usership"] = data["usership"] + 1
+    else:
+        print("ship is not valid")
+    data["tempship"] =[]    
+    return 
 
 '''
 clickUserBoard(data, row, col)
@@ -236,6 +241,14 @@ Parameters: dict mapping strs to values ; int ; int
 Returns: None
 '''
 def clickUserBoard(data, row, col):
+    rc=data["userboard"]
+    if [row,col] in rc or data["usership"] == 5:
+        return
+    data["tempship"].append([row,col])
+    if len(data["temship"]) == 3:
+        placeShip(data)
+    if data["usership"] == 5:
+        print("you can start the game")
     return
 
 
@@ -342,7 +355,7 @@ def runSimulation(w, h):
 # This code runs the test cases to check your work
 if __name__ == "__main__":
 
-    test.testDrawShip()
+    # test.testShipIsValid()
 
 
 
