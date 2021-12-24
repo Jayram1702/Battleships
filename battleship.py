@@ -69,6 +69,8 @@ def mousePressed(data, event, board):
     ccell = getClickedCell(data, event)
     if board == "user":
         clickUserBoard(data, ccell[0], ccell[1])
+    if board == "comp":
+        runGameTurn(data, ccell[0], ccell[1])
     pass
 
 #### WEEK 1 ####
@@ -144,11 +146,16 @@ def drawGrid(data, canvas, grid, showShips):
     for a in range(data["rows"]):
         for b in range(data["cols"]):
             if grid[a][b] == SHIP_UNCLICKED:
-                # if showShips == True:
-                canvas.create_rectangle(b*data["cellsize"],a*data["cellsize"], data["cellsize"] * (b+1), (a+1) * data["cellsize"], fill="yellow")
+                if showShips == True:
+                    canvas.create_rectangle(b*data["cellsize"],a*data["cellsize"], data["cellsize"] * (b+1), (a+1) * data["cellsize"], fill="yellow")
+                else:
+                    canvas.create_rectangle(b*data["cellsize"],a*data["cellsize"], data["cellsize"] * (b+1), (a+1) * data["cellsize"], fill="blue")
+            elif grid[a][b] == SHIP_CLICKED:
+                 canvas.create_rectangle(b*data["cellsize"],a*data["cellsize"], data["cellsize"] * (b+1), (a+1) * data["cellsize"], fill="red")
+            elif grid[a][b] == EMPTY_CLICKED:
+                 canvas.create_rectangle(b*data["cellsize"],a*data["cellsize"], data["cellsize"] * (b+1), (a+1) * data["cellsize"], fill="white")
             else:
-                 canvas.create_rectangle(b*data["cellsize"],a*data["cellsize"], data["cellsize"] * (b+1), (a+1) * data["cellsize"], fill="blue")
-
+                canvas.create_rectangle(b*data["cellsize"],a*data["cellsize"], data["cellsize"] * (b+1), (a+1) * data["cellsize"], fill="blue")
 
 ### WEEK 2 ###
 
@@ -190,8 +197,7 @@ def getClickedCell(data, event):
     y_cordinate = event.y
     data["getClickedCell"] = [int(event.y/csize), int(event.x/csize)]
     return data["getClickedCell"]
-
-
+    
 '''
 drawShip(data, canvas, ship)
 Parameters: dict mapping strs to values ; Tkinter canvas; 2D list of ints
@@ -263,6 +269,11 @@ Parameters: dict mapping strs to values ; 2D list of ints ; int ; int ; str
 Returns: None
 '''
 def updateBoard(data, board, row, col, player):
+    if board[row][col] == SHIP_UNCLICKED:
+        board[row][col] = SHIP_CLICKED
+    else:
+        board[row][col] == EMPTY_UNCLICKED
+        board[row][col] = EMPTY_CLICKED
     return
 
 
@@ -272,8 +283,12 @@ Parameters: dict mapping strs to values ; int ; int
 Returns: None
 '''
 def runGameTurn(data, row, col):
-    return
-
+    u=data["userboard"]
+    c=data["computerboard"]
+    if c[row][col] == SHIP_CLICKED or c[row][col] == EMPTY_CLICKED:
+        return
+    else:
+        return updateBoard(data, c, row, col, "user")
 
 '''
 getComputerGuess(board)
@@ -281,6 +296,7 @@ Parameters: 2D list of ints
 Returns: list of ints
 '''
 def getComputerGuess(board):
+    
     return
 
 
@@ -358,7 +374,7 @@ def runSimulation(w, h):
 # This code runs the test cases to check your work
 if __name__ == "__main__":
 
-    # test.testShipIsValid()
+    test.testUpdateBoard()
 
 
 
