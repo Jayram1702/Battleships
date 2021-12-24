@@ -37,6 +37,8 @@ def makeModel(data):
     data["tempship"] = []
     data["usership"] = 0
     data["winner"] = None
+    data["maxturns"] = 50
+    data["noofturns"] = 0
     return data
 
 
@@ -278,6 +280,8 @@ def updateBoard(data, board, row, col, player):
         board[row][col] = EMPTY_CLICKED
     if isGameOver(board):
         data["winner"] = player
+    if data["noofturns"] == data["maxturns"]:
+        data["winner"] = "draw"
     return
 
 
@@ -289,13 +293,15 @@ Returns: None
 def runGameTurn(data, row, col):
     u=data["userboard"]
     c=data["computerboard"]
-    if c[row][col] == SHIP_CLICKED or c[row][col] == EMPTY_CLICKED:
-        return
-    else:
-        updateBoard(data, c, row, col, "user")
-    
-    cguess=getComputerGuess(u) #[1,2]
-    updateBoard(data, u, cguess[0], cguess[1], "comp" )
+    if data["noofturns"] <= data["maxturns"]: 
+        if c[row][col] == SHIP_CLICKED or c[row][col] == EMPTY_CLICKED:
+            return
+        else:
+            updateBoard(data, c, row, col, "user")
+        
+        cguess=getComputerGuess(u) #[1,2]
+        updateBoard(data, u, cguess[0], cguess[1], "comp" )
+        data["noofturns"] += 1
     return 
 
 
@@ -333,9 +339,10 @@ Returns: None
 def drawGameOver(data, canvas):
     if data["winner"] == "user":
         canvas.create_text(250, 200, text = "Congratulations You won", font = "Times 30",anchor = "center")
-    if data["winner"] == "comp":
+    elif data["winner"] == "comp":
         canvas.create_text(200, 200, text= "You Lost", font = "Times 30", anchor = "center")
-
+    elif data["winner"] == "draw":
+        canvas.create_text(200, 200, text = "Out of moves\n Match Drawn ", font = "Times 30",anchor = "center")
     return
 
 
