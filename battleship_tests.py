@@ -84,7 +84,7 @@ def testAddShips():
 def testMakeModel():
     print("Testing makeModel()...", end="")
     data = { }
-    makeModel(data)
+    data= makeModel(data)
     values = data.values()
     assert(10 in values) # have you stored the number of rows and cols?
     assert(500 in values) # have you stored the board size?
